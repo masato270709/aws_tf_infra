@@ -35,6 +35,12 @@ jobs:
       - name: Terraform Init ##S3バックエンドの初期化（tfstateを読み込む）
         run: terraform init
 
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        run: terraform validate
+
       - name: Terraform Plan
         run: terraform plan
 
