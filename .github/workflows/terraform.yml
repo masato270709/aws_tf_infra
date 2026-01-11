@@ -32,7 +32,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ap-northeast-1
 
-      - name: Terraform Init
+      - name: Terraform Init ##S3バックエンドの初期化（tfstateを読み込む）
         run: terraform init
 
       - name: Terraform Plan

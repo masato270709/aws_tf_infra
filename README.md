@@ -23,8 +23,12 @@
 │       ├── main.tf
 │       ├── variables.tf
 │       └── backend.tf
-└── .github/workflows/      # GitHub Actions
-    └── terraform.yml
+├── .github/workflows/      # GitHub Actions
+│    └── terraform.yml
+├── src/                   # コード本体
+    ├── job1.py
+    └── tests/             # Pythonのテストコード
+
 ```
 
 ## 📚 構成要素の説明
