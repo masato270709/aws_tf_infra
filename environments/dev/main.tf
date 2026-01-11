@@ -12,7 +12,7 @@ terraform {
 
   # ステート管理用のバケット（手動で作成した名前を入れてください）
   backend "s3" {
-    bucket = "dev-tfstate-bucket-20250111 " # ← ここを書き換え
+    bucket = "dev-tfstate-bucket-20250111" # ← ここを書き換え
     key    = "dev/terraform.tfstate"
     region = "ap-northeast-1"
   }
