@@ -1,0 +1,42 @@
+name: "Terraform Dev Deployment"
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'environments/dev/**'  # devフォルダに変更があった時だけ動かす
+      - 'modules/**'          # 共通モジュールの変更時も動かす
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-dev:
+    runs-on: ubuntu-latest
+    # 作業ディレクトリを指定
+    defaults:
+      run:
+        working-directory: ./environments/dev
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
