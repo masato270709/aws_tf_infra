@@ -1,0 +1,36 @@
+{
+    "name": "AWS Glue 5.0 Local Dev",
+    "image": "public.ecr.aws/glue/aws-glue-libs:5",
+    // Glue 5.0のデフォルトはhadoopユーザーですが、
+    // 権限トラブルを避けるため、一旦rootで入るのが最も安定します
+    "remoteUser": "root",
+    "containerEnv": {
+        "AWS_ACCESS_KEY_ID": "dummy",
+        "AWS_SECRET_ACCESS_KEY": "dummy",
+        "AWS_REGION": "ap-northeast-1",
+        "DISABLE_SSL": "true"
+    },
+    // ローカルのAWS設定を同期したい場合（任意）
+    //"mounts": [
+    //    "source=${localEnv:USERPROFILE}/.aws,target=/root/.aws,type=bind,consistency=cached"
+    //],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-toolsai.jupyter",
+                "hashicorp.terraform"
+            ],
+            "settings": {
+                // Glue 5.0 の Python パス
+                "python.defaultInterpreterPath": "/usr/bin/python3.11",
+                "python.analysis.extraPaths": [
+                    "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip",
+                    "/usr/lib/spark/python/",
+                    "/usr/lib/spark/python/lib/"
+                ]
+            }
+        }
+    }
+}
