@@ -68,8 +68,3 @@ moved {
   from = aws_s3_bucket.this
   to   = aws_s3_bucket.source_bucket
 }
-
-moved {
-  from = aws_s3_bucket_public_access_block.this
-  to   = aws_s3_bucket_public_access_block.source_bucket_block
-}
