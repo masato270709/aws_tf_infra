@@ -1,9 +1,10 @@
 # --- 1. ソース管理用バケット ---
 resource "aws_s3_bucket" "source_bucket" {
-  bucket = "my-project-apps-source-bucket"
+  # 固定値ではなく変数を使う
+  bucket = var.bucket_name 
+  
   tags = {
     Environment = "dev"
-    Role        = "source-assets"
   }
 }
 
