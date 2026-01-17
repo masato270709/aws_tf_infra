@@ -1,6 +1,6 @@
 # 1. カスタムポリシーの定義
 resource "aws_iam_policy" "glue_redshift_allow_policy" {
-  name        = "Glue_Redshift_Allow_Policy"
+  name        = "Glue_Redshift_Allow_Policy_TF"
   description = "Policy for Glue to access Redshift, CloudWatch, and KMS"
 
   policy = jsonencode({
