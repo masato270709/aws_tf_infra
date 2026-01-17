@@ -1,7 +1,7 @@
 resource "aws_glue_job" "redshift_encrypt_job" {
   name              = "redshift-id-encryption-job"
   role_arn          = var.glue_role_arn
-  glue_version      = "5.1"
+  glue_version      = "5.0"
   worker_type       = "G.1X"
   number_of_workers = 2
 
