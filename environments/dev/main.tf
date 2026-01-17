@@ -3,7 +3,7 @@ module "dev_s3_bucket" {
   source = "../../modules/s3"
 
   # 変数名をモジュール側に合わせる
-  source_bucket_name = "my-glue-project-dev-data-2026"
+  source_bucket_name = "my-glue-project-dev-data"
   temp_bucket_name   = "my-project-glue-temp-bucket"
 }
 
