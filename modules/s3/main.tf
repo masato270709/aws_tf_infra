@@ -1,8 +1,8 @@
 # --- 1. ソース管理用バケット ---
 resource "aws_s3_bucket" "source_bucket" {
   # 固定値ではなく変数を使う
-  bucket = var.source_bucket_name 
-  
+  bucket = var.source_bucket_name
+
   tags = {
     Environment = "dev"
   }

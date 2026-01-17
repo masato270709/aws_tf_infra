@@ -13,9 +13,9 @@ resource "aws_iam_policy" "glue_redshift_allow_policy" {
         Resource = "*"
       },
       {
-        Sid      = "RedshiftPolicy"
-        Effect   = "Allow"
-        Action   = [
+        Sid    = "RedshiftPolicy"
+        Effect = "Allow"
+        Action = [
           "redshift-serverless:*",
           "redshift-data:*"
         ]
