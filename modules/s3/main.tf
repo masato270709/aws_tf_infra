@@ -63,3 +63,13 @@ output "source_bucket_id" {
 output "temp_bucket_id" {
   value = aws_s3_bucket.glue_temp_bucket.id
 }
+
+moved {
+  from = aws_s3_bucket.this
+  to   = aws_s3_bucket.source_bucket
+}
+
+moved {
+  from = aws_s3_bucket_public_access_block.this
+  to   = aws_s3_bucket_public_access_block.source_bucket_block
+}
