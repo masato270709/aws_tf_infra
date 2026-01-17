@@ -27,17 +27,3 @@ module "dev_glue" {
   kms_key_id               = "arn:aws:kms:ap-northeast-1:xxx:key/xxx"
   redshift_connection_name = "your-redshift-connection"
 }
-
-###一時追加
-
-# --- ソース用S3バケットのインポート ---
-import {
-  to = module.dev_s3_bucket.aws_s3_bucket.source_bucket
-  id = "my-glue-project-dev-data-2026"
-}
-
-# --- 一時用S3バケットのインポート ---
-import {
-  to = module.dev_s3_bucket.aws_s3_bucket.glue_temp_bucket
-  id = "my-project-glue-temp-bucket"
-}
