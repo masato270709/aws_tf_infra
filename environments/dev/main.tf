@@ -1,3 +1,12 @@
+terraform {
+  required_version = ">= 1.0.0"
+
+  backend "s3" {
+    bucket = "dev-tfstate-bucket-20250111" # 以前作成したState保存用バケット名
+    key    = "dev/terraform.tfstate"
+    region = "ap-northeast-1"
+  }
+}
 # S3モジュールの呼び出し
 module "dev_s3_bucket" {
   source = "../../modules/s3"
