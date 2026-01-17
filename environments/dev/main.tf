@@ -29,6 +29,12 @@ module "dev_glue" {
 }
 
 ###一時追加
+# --- IAMロールのインポート (これが必要です) ---
+import {
+  to = module.dev_iam.aws_iam_role.glue_redshift_role
+  id = "SR_Glue_Redshift_TF"
+}
+
 # --- IAMポリシーのインポート ---
 import {
   to = module.dev_iam.aws_iam_policy.glue_redshift_allow_policy
