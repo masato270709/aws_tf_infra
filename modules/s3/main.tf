@@ -1,7 +1,7 @@
 # --- 1. ソース管理用バケット ---
 resource "aws_s3_bucket" "source_bucket" {
   # 固定値ではなく変数を使う
-  bucket = var.bucket_name 
+  bucket = var.source_bucket_name 
   
   tags = {
     Environment = "dev"
@@ -29,7 +29,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "source_crypto" {
 
 # --- 2. Glue一時ファイル用バケット ---
 resource "aws_s3_bucket" "glue_temp_bucket" {
-  bucket = "my-project-glue-temp-bucket"
+  bucket = var.temp_bucket_name
   tags = {
     Environment = "dev"
     Role        = "glue-temp"
