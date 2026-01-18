@@ -47,6 +47,6 @@ module "dev_glue" {
 # kmsモジュール呼び出し
 module "dev_kms" {
   source        = "../../modules/kms"
-  env           = locals.env
+  env           = local.env
   glue_role_arn = module.dev_iam.role_arn # IAMモジュールの出力を渡す
 }

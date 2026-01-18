@@ -2,7 +2,7 @@
 resource "aws_kms_key" "glue_key" {
   description              = "KMS key for Glue Redshift ID encryption"
   is_enabled               = true              # 暗号化後の値が都度変わってしまうと不整合が起きてしまうため。
-  customer_master_key_spec = SYMMETRIC_DEFAULT # AES256を宣言
+  customer_master_key_spec = "SYMMETRIC_DEFAULT" # AES256を宣言
   enable_key_rotation      = false             # 後述の理由により有効を推奨
 
   # キーポリシー（Glueロールに権限を付与）
