@@ -1,3 +1,8 @@
+# 環境名を指定
+locals {
+  env = "dev"
+}
+
 terraform {
   required_version = ">= 1.0.0"
 
@@ -7,6 +12,8 @@ terraform {
     region = "ap-northeast-1"
   }
 }
+
+
 # S3モジュールの呼び出し
 module "dev_s3_bucket" {
   source = "../../modules/s3"
@@ -35,4 +42,11 @@ module "dev_glue" {
   # KMSや接続名はご自身の環境に合わせて指定
   kms_key_id               = "arn:aws:kms:ap-northeast-1:xxx:key/xxx"
   redshift_connection_name = "your-redshift-connection"
+}
+
+# kmsモジュール呼び出し
+module "dev_kms" {
+  source        = "../../modules/kms"
+  env           = locals.env
+  glue_role_arn = module.dev_iam.role_arn # IAMモジュールの出力を渡す
 }
