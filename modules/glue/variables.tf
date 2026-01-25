@@ -30,11 +30,11 @@ variable "redshift_connection_name" {
 variable "db_schema" {
   description = "読み込み対象のスキーマ名"
   type        = string
-  default     = "public"
+  default     = "sc_test_1"
 }
 
 variable "db_table" {
   description = "読み込み対象のテーブル名"
   type        = string
-  default     = "person"
+  default     = "user_order"
 }

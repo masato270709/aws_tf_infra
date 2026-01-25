@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # LocalStack: AWS サービスエミュレーション
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"  # LocalStack Gateway
+    environment:
+      - SERVICES=kms,s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - "${TMPDIR:-.}/.localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  # PostgreSQL: Redshift の代替
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: db_test_1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./test/init_db.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # PySpark + Glue 開発環境
+  glue-dev:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    environment:
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_DEFAULT_REGION: ap-northeast-1
+      # ローカル環境を指定
+      LOCALSTACK_ENDPOINT: http://localstack:4566
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: db_test_1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      # Glue 5.0設定
+      DISABLE_SSL: "true"
+    ports:
+      - "8888:8888"  # Jupyter
+    volumes:
+      - .:/workspace
+    depends_on:
+      - localstack
+      - postgres
+    working_dir: /workspace
+    user: "root"
+
+volumes:
+  postgres_data:

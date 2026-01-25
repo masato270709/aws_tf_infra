@@ -42,6 +42,8 @@ module "dev_glue" {
   # KMSや接続名はご自身の環境に合わせて指定
   kms_key_id               = "arn:aws:kms:ap-northeast-1:xxx:key/xxx"
   redshift_connection_name = "your-redshift-connection"
+  db_schema                = "sc_test_1"
+  db_table                 = "user_order"
 }
 
 # kmsモジュール呼び出し
