@@ -1,18 +1,16 @@
-FROM public.ecr.aws/glue/aws-glue-libs:glue_libs_5_0_0
+# AWS Glue 5.0 のローカル開発環境
+# 公式の AWS Glue Docker イメージを使用
+# https://docs.aws.amazon.com/ja_jp/glue/latest/dg/develop-local-docker-image.html
+FROM public.ecr.aws/glue/aws-glue-libs:5
 
 USER root
 
-# Python依存パッケージをインストール
-RUN apt-get update && apt-get install -y \
-    postgresql-client \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# requirements.txt をコピーしてインストール
+# requirements.txt をコピーして Python パッケージをインストール
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN /usr/bin/python3.11 -m pip install --upgrade pip && \
+    /usr/bin/python3.11 -m pip install --no-cache-dir -r requirements.txt
 
 WORKDIR /workspace
 
-# デフォルトのシェルを設定
-CMD ["/bin/bash"]
+# bash をシェルとして設定
+ENV SHELL=/bin/bash

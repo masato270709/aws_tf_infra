@@ -1,9 +1,10 @@
-{
+﻿{
     "name": "AWS Glue 5.0 Local Dev",
     "dockerComposeFile": "../docker-compose.yml",
     "service": "glue-dev",
     "workspaceFolder": "/workspace",
     "remoteUser": "root",
+    "overrideCommand": true,  // この行を追加
     "customizations": {
         "vscode": {
             "extensions": [
@@ -13,14 +14,12 @@
                 "hashicorp.terraform"
             ],
             "settings": {
-                // Glue 5.0 の Python パス
                 "python.defaultInterpreterPath": "/usr/bin/python3.11",
                 "python.analysis.extraPaths": [
-                    "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip",
-                    "/usr/lib/spark/python/",
-                    "/usr/lib/spark/python/lib/"
+                    "/usr/lib/spark/python/lib/py4j-0.10.9.7-src.zip:/usr/lib/spark/python/:/usr/lib/spark/python/lib/"
                 ]
             }
         }
-    }
+    },
+    "postCreateCommand": "echo 'AWS Glue 5.0 development environment ready!'"
 }

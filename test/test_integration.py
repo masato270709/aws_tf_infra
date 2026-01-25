@@ -52,14 +52,14 @@ def test_localstack_kms():
                 Plaintext=b'test_id_12345'
             )
             print(f"✓ KMS encryption test passed")
-            return True
+            assert True
         except kms.exceptions.NotFoundException:
             print("⚠ KMS key alias/aws/s3 not found, but KMS is working")
-            return True
+            assert True
             
     except Exception as e:
         print(f"✗ KMS test failed: {e}")
-        return False
+        assert False, f"KMS test failed: {e}"
 
 def test_postgres_connection():
     """PostgreSQLの接続テスト"""
@@ -86,15 +86,12 @@ def test_postgres_connection():
         cursor.execute("""
             SELECT EXISTS (
                 SELECT FROM information_schema.tables 
-                WHERE table_schema = 'public' AND table_name = 'person'
+                WHERE table_schema = 'sc_test_1' AND table_name = 'user_order'
             )
         """)
         
-        if cursor.fetchone()[0]:
-            print("✓ Table 'person' exists")
-        else:
-            print("✗ Table 'person' not found")
-            return False
+        assert cursor.fetchone()[0], "Table 'sc_test_1.user_order' not found"
+        print("✓ Table 'sc_test_1.user_order' exists")
         
         # データの件数確認
         cursor.execute("SELECT COUNT(*) FROM sc_test_1.user_order")
@@ -110,11 +107,8 @@ def test_postgres_connection():
         cursor.close()
         conn.close()
         
-        return True
-        
     except Exception as e:
-        print(f"✗ PostgreSQL test failed: {e}")
-        return False
+        assert False, f"PostgreSQL test failed: {e}"
 
 def test_data_encryption_simulation():
     """暗号化処理のシミュレーション"""
@@ -142,12 +136,8 @@ def test_data_encryption_simulation():
             print(f"✓ ID {test_id} -> None")
     
     # NULL値の処理が正しいか確認
-    if encrypted_ids[-1] is None:
-        print("✓ NULL handling test passed")
-        return True
-    else:
-        print("✗ NULL handling test failed")
-        return False
+    assert encrypted_ids[-1] is None, "NULL handling test failed"
+    print("✓ NULL handling test passed")
 
 def test_postgres_write():
     """PostgreSQLへの書き込みテスト"""
@@ -170,24 +160,21 @@ def test_postgres_write():
         
         cursor = conn.cursor()
         
-        # テスト用テーブルを作成
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS sc_test_1.user_order_encrypted (
-                id VARCHAR(500),
-                name VARCHAR(100),
-                birthdate DATE
-            )
-        """)
-        
-        # テストデータを挿入
+        # 既存テーブルをTRUNCATE（テストデータを削除）
+        cursor.execute("TRUNCATE TABLE sc_test_1.user_order_encrypted")
+        conn.commit()
+
+        # テストデータを挿入（init_db.sqlと同じデータ）
         import base64
         test_data = [
-            (base64.b64encode(b'1').decode('utf-8'), 'Alice', '1990-01-15'),
-            (base64.b64encode(b'2').decode('utf-8'), 'Bob', '1985-05-20'),
+            ('10000000000000000000000000000007', 'Alice', '1990-01-01', base64.b64encode(b'10000000000000000000000000000007').decode('utf-8')),
+            ('10000000000000000000000000000007', 'Bob', '1995-06-15', base64.b64encode(b'10000000000000000000000000000007').decode('utf-8')),
+            ('10000000000000000000000000000002', 'Charlie', '1988-12-25', base64.b64encode(b'10000000000000000000000000000002').decode('utf-8')),
+            ('10000000000000000000000000000001', 'whisky', '1988-12-25', base64.b64encode(b'10000000000000000000000000000001').decode('utf-8')),
         ]
-        
+
         cursor.executemany(
-            "INSERT INTO sc_test_1.user_order_encrypted (id, name, birthdate) VALUES (%s, %s, %s)",
+            "INSERT INTO sc_test_1.user_order_encrypted (id, name, birthdate, encrypted_id) VALUES (%s, %s, %s, %s)",
             test_data
         )
         
@@ -198,17 +185,14 @@ def test_postgres_write():
         count = cursor.fetchone()[0]
         print(f"✓ Inserted {count} rows into user_order_encrypted table")
         
-        # クリーンアップ
-        cursor.execute("DROP TABLE sc_test_1.user_order_encrypted")
+        # クリーンアップ - テーブルをクリア
+        cursor.execute("TRUNCATE TABLE sc_test_1.user_order_encrypted")
         conn.commit()
         cursor.close()
         conn.close()
         
-        return True
-        
     except Exception as e:
-        print(f"✗ PostgreSQL write test failed: {e}")
-        return False
+        assert False, f"PostgreSQL write test failed: {e}"
 
 def main():
     """メインテスト実行"""

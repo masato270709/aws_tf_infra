@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # LocalStack: AWS サービスエミュレーション
   localstack:
@@ -9,9 +7,7 @@ services:
     environment:
       - SERVICES=kms,s3
       - DEBUG=1
-      - DATA_DIR=/tmp/localstack/data
     volumes:
-      - "${TMPDIR:-.}/.localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
 
   # PostgreSQL: Redshift の代替
@@ -45,6 +41,7 @@ services:
       POSTGRES_PASSWORD: postgres
       # Glue 5.0設定
       DISABLE_SSL: "true"
+    command: tail -f /dev/null
     ports:
       - "8888:8888"  # Jupyter
     volumes:
